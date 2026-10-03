@@ -1,24 +1,17 @@
-import { StyleSheet, Text, View ,Button, TouchableOpacity,ImageBackground,ScrollView } from 'react-native';
+import { StyleSheet, Text, View ,Button, TouchableOpacity,ScrollView } from 'react-native';
  import { TextInput } from 'react-native-paper';
 import {SafeAreaView  } from'react-native-safe-area-context';
 import{ useState } from 'react';
-//import FocusTime from '../../component/focusTime';
 import {StatusBar} from 'expo-status-bar';
 import{router } from 'expo-router';
 import {useTasks} from '../../contexts/taskContets';
 import {useColors} from'../../contexts/ColorContets' 
 
 export default function Home() { 
-  //const [switchScreen,setSwitchScreen] = useState(false);//focusTime screen atasay    
-// *const [addTask , setAddTask] = useState(false);
-//const [task,setTask] = useState('');
-//const [tasks,setTasks] =useState([]);//ye mnsfewn list lemaskemet  new 
-//const [selectedTask, setSelectedTask]=useState("");// list wst yemeretnewn lemaskemet new
+
 const {task,setTask,tasks,setTasks,selectedTask,setSelectedTask}=useTasks();
 const { colors,  StatusBarStyle} = useColors();
-//const changeScreen = () => { 
-  //setSwitchScreen(!switchScreen);// function new screen ykeyral ena boolean ygelebtal(!)
-//}
+
  const addTask = () => {   // function new button sichan yseral
   const trimmed = task.trim();  //space yatefal e.g  |    learn react |--> | learn react| 
   if (trimmed.length>0)  {  // snt fidel endesafe yfetshal
@@ -26,33 +19,10 @@ const { colors,  StatusBarStyle} = useColors();
   //  hulu yametal trimmed wtetun ykeyral
     setTask("") //button keteneka behuala learn react blen yesafnew ytefal(clane endiyaderg)
     setSelectedTask(trimmed); //ahun yemeretkut task screen lay askemtlgni
-  //setSwitchScreen(!switchScreen);// function new screen ykeyral ena boolean ygelebtal(!)
-   //setSwitchScreen(true);// screen ykeyral//yhe sitera switchScreen= true yhonal
    router.push({pathname:'/focusTime',})
                 
   }
 };
-
-
- //const handleBack = () =>{
-  //setAddTask (prev =>!prev);//back button sichan false->true ,true->false
- //}
-
-//if(switchScreen) {  // = if(switchscreen === true) yhe malet screen ykeyrewal malet new
-// return <FocusTime  // FocusTime asay
- //focusTask ={selectedTask} // learn react native bihon yemeretnew esun wed focus yemiwesdln{ 
-  // focusTask&onBck props is parent component ke aap wed focustime yemilkew mereja new  }
-  // onBack = { changeScreen} /> //  ezihm funcion eyelacn new on back snneka degmo screen adrglgni
-//};
-
-
-
-
-// const handleaddTask = () =>{  //add task function
-
- //setTasks([...tasks,task]);
-  
- //};
     
   return (
     <SafeAreaView style={[styles.container,{backgroundColor:colors.background}]}>
@@ -64,35 +34,52 @@ const { colors,  StatusBarStyle} = useColors();
       <Text>hello</Text>
      <View  style= { styles.inputcontainer}>
      < TextInput 
-     style={styles.textinput}
      placeholder="what would you like to focus on..." 
-     mode = "outlined"  
+     mode = "outlined"
+     style={[styles.textinput,{backgroundColor:colors.surface,color:colors.textPrimary,borderRadius:10,paddingHorizontal:15}]}  
      value={task}
      onChangeText={ (text) => setTask(text )}
      />
     < TouchableOpacity
-      style={[styles.fabbutton,{backgroundColor:colors.textPrimary}]} 
+      style={[styles.fabbutton,{backgroundColor:colors.background,borderColor:colors.surface}]} 
        onPress={() =>{
         addTask();}}
        //changeScreen();
       
          >
         <Text
-       style={ styles.fabText}>+</Text>
+       style={[ styles.fabText,{color:colors.primary}]}>+</Text>
       </ TouchableOpacity>
      </View>
-     <View style={styles.focusedtaske}>
-      <Text style={[styles.focuseTitle,{color:colors.textPrimary}]}>Things we've focusd on:</Text>
-      <ImageBackground style={styles.taskBackground} source={require('../../../assets/images/focusss.jpg')}>
+          <View style={styles.focusedtaske}>
+      <Text style={[styles.focuseTitle,{color:colors.textPrimary}]}>Previous Focsed Tasks:</Text>
+  
       <ScrollView style= {{padding:20}} contentContainerStyle={{ gap:20} } >
       {tasks.map(( task,index) =>(
-        <Text key={index} style ={styles.taskText} >-{task} </Text>// yemnsetew stayle leeyandandu endiders
-      )
-      )}
+        <Pressable
+        style={[styles.tasksList,{backgroundColor:colors.surface}]}
+        key={index}
+        onPress={() =>{
+          changeScreen();
+          setSelectedTask(task);
+        }}
+        >
+      <Text>
+        {index + 1}
+      </Text>
+      <Text
+      key ={index}
+      style={[styles.taskText, {color:colors.textPrimary}]}
+      >
+        {task}
+      </Text>
+     </Pressable>
+      ))}
        </ScrollView>
-       </ImageBackground>
-     </View>
+  
+  
     
+     </View>
     </SafeAreaView>
   );
 }
@@ -131,7 +118,7 @@ fabbutton:{
     justifyContent:'center',
     alignItems:'center',
    backgroundColor:'transparent',
-   borderRadius:40,
+   borderRadius:25,
    borderWidth:2,
    borderColor:'white',
    marginLeft:10,
@@ -153,7 +140,7 @@ fabbutton:{
     color:'white'
   },
   taskText:{
-    fontWeight:'semi-bold',
+    fontWeight:'600',
     fontSize:18,
     color:'#fff',
     padding:10
@@ -164,5 +151,13 @@ fabbutton:{
     overflow:'hidden',
     borderRadius :20,
     marginTop:20,
-  }
+  },
+  tasksList:{
+    flexDirection:'row',
+    alignItems:'center',
+    padding:10,
+    borderRadius:10,
+  },
+
+
 });
