@@ -1,4 +1,4 @@
-import {View,Text,StyleSheet,TouchableOpacity,Alert,ImageBackground} from 'react-native'
+import {View,Text,StyleSheet,TouchableOpacity} from 'react-native'
 import { SafeAreaView} from 'react-native-safe-area-context'
 import {useState,useEffect} from 'react'//useEffect=and nger sikeyer weym compont sikefet code masked
 import Toast from 'react-native-toast-message';
@@ -57,7 +57,7 @@ export default function FocusTime(){
           <TouchableOpacity style={[styles.backFab,{background:colors.textPrimary}]} onPress={() => {router.back();
   setSelectedTime(null)   ;                                                            }}>
             <Ionicons name="chevron-back" size={24} color={colors.textPrimary}/>
-            <Text style={{color:colors.textPrimary}}>Back</Text>
+            <Text style={{color:colors.textPrimary}}>Focus Session</Text>
          </TouchableOpacity>
          
             <Text style={[styles.timerText,{color:colors.textPrimary}]}>
@@ -179,9 +179,9 @@ backFab:{
   flexDirection:'row',
   height:50,
   width:100,
-  marginTop:50,
+  marginTop:120,
   alignItems:'center',
-  alignSelf:'flrx-start',
+  alignSelf:'flex-start',
 },
 styleTask:{
   alignItems:'center',

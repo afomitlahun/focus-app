@@ -30,7 +30,7 @@ export default function RootLayout({children}){
       <Drawer
         screenOptions={{
           drawerStyle: {backgroundColor:colors.background},
-          headerStyle: { backgroundColor: colors.background },
+          headerStyle: { backgroundColor: colors.background,elevation:0,borderWidth:0 },
           headerTintColor:colors.textPrimary,
         }}
         >

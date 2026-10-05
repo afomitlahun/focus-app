@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View ,Button, TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet, Text, View ,Button, TouchableOpacity,ScrollView,Pressable } from 'react-native';
  import { TextInput } from 'react-native-paper';
 import {SafeAreaView  } from'react-native-safe-area-context';
 import{ useState } from 'react';
@@ -11,6 +11,8 @@ export default function Home() {
 
 const {task,setTask,tasks,setTasks,selectedTask,setSelectedTask}=useTasks();
 const { colors,  StatusBarStyle} = useColors();
+const isDark = colors.background === '#0B121E';
+const accent = isDark ? '#5e5757' : '#0077CC';
 
  const addTask = () => {   // function new button sichan yseral
   const trimmed = task.trim();  //space yatefal e.g  |    learn react |--> | learn react| 
@@ -31,24 +33,27 @@ const { colors,  StatusBarStyle} = useColors();
         <Text style={[styles.headerTitle,{color:colors.textPrimary}]}>Focus</Text>
         <Text style={[styles.headerSubTitle,{color:colors.textSecondary}]}>what do want to work on?</Text>
       </View>
-      <Text>hello</Text>
      <View  style= { styles.inputcontainer}>
      < TextInput 
      placeholder="what would you like to focus on..." 
      mode = "outlined"
-     style={[styles.textinput,{backgroundColor:colors.surface,color:colors.textPrimary,borderRadius:10,paddingHorizontal:15}]}  
+     textColor={colors.textPrimary}
+     placeholderTextColor={colors.textTertiary}
+     outlineColor={colors.outline}
+     activeOutlineColor={colors.primary}
+     style={[styles.textinput,{backgroundColor:colors.surface,borderRadius:10,paddingHorizontal:15}]}  
      value={task}
      onChangeText={ (text) => setTask(text )}
      />
     < TouchableOpacity
-      style={[styles.fabbutton,{backgroundColor:colors.background,borderColor:colors.surface}]} 
+      style={[styles.fabbutton,{backgroundColor:colors.background,borderColor:colors.outline}]} 
        onPress={() =>{
         addTask();}}
        //changeScreen();
       
          >
         <Text
-       style={[ styles.fabText,{color:colors.primary}]}>+</Text>
+       style={[ styles.fabText, {color: accent}]}>+</Text>
       </ TouchableOpacity>
      </View>
           <View style={styles.focusedtaske}>
@@ -57,16 +62,19 @@ const { colors,  StatusBarStyle} = useColors();
       <ScrollView style= {{padding:20}} contentContainerStyle={{ gap:20} } >
       {tasks.map(( task,index) =>(
         <Pressable
-        style={[styles.tasksList,{backgroundColor:colors.surface}]}
+        style={[styles.tasksList,{backgroundColor:colors.surface,borderWidth:1,borderColor:colors.outline}]}
         key={index}
         onPress={() =>{
-          changeScreen();
           setSelectedTask(task);
+          router.push({
+            pathname:"/focusTime",
+          })
         }}
         >
-      <Text>
+      <Text style={[styles.taskText1,{color:colors.textSecondary}]}>
         {index + 1}
       </Text>
+
       <Text
       key ={index}
       style={[styles.taskText, {color:colors.textPrimary}]}
@@ -143,7 +151,13 @@ fabbutton:{
     fontWeight:'600',
     fontSize:18,
     color:'#fff',
-    padding:10
+    padding:10,
+  },
+  taskText1:{
+    fontWeight:'600',
+    fontSize:18,
+    color:'#fff',
+    padding:10,
   },
   taskBackground:{
     flex:1,
