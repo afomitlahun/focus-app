@@ -4,7 +4,7 @@ import {useState,useEffect} from 'react'//useEffect=and nger sikeyer weym compon
 import Toast from 'react-native-toast-message';
 
 import { Ionicons} from '@expo/vector-icons';
-import{router ,useLocalSearchParams} from 'expo-router';
+import{router } from 'expo-router';
 import {useTasks} from '../../contexts/taskContets'
 import {useColors} from '../../contexts/ColorContets';
 
@@ -63,12 +63,12 @@ export default function FocusTime(){
             <Text style={[styles.timerText,{color:colors.textPrimary}]}>
                {selectedTime ? timeFormat (selectedTime): '00:00'}
                 </Text>
-            
+            <View style={styles.focusTaskcontainer}>
            <Text style={[styles.subTite,{color:colors.textPrimary}]}>focusing on : </Text>
            <Text style={[styles.focusTask,{ color:colors.textPrimary }]}> {focusTask}</Text>
+           </View>
 
           <View style={styles.underselectedText}/>
-          <Text style={[styles.styleTask],{color:colors.textPrimary}}> Task  </Text>
           <View style={[styles.timeOptions,{backgroundColor:colors.background}]}>
             {times.map((time,index) =>( 
               <TouchableOpacity 
@@ -122,19 +122,18 @@ timerText:{
 subTite:{
   fontSize:18,
   color:'#fff',
-  marginTop:30,
+  marginTop:3,
 },
 focusTask:{
-  fonitSize:30,
+  fonitSize:40,
   color:'#fff',
-  marginTope:50,
+  marginTop:5,
  fontWeight:'bold',
 
 },
 underselectedText:{ //fezazawa line
   height:10,
   width:'100%',
-  backgroundColor:'#6ccdd7',
   marginTop:30,
   marginBottom:20,
 
@@ -179,9 +178,10 @@ backFab:{
   flexDirection:'row',
   height:50,
   width:100,
-  marginTop:120,
+  marginTop:11,
   alignItems:'center',
   alignSelf:'flex-start',
+  marginLeft:20,
 },
 styleTask:{
   alignItems:'center',
@@ -191,5 +191,12 @@ styleTask:{
  // alignSelf:'center',
   marginBottom:20,
   padding:20,
+},
+focusTaskcontainer:{
+  flexDirection:'row',
+  marginTop:60,
+  height:40,
+  width:80,
+   alignItems:'center',
 }
 })
