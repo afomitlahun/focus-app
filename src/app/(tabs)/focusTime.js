@@ -1,202 +1,195 @@
-import {View,Text,StyleSheet,TouchableOpacity} from 'react-native'
-import { SafeAreaView} from 'react-native-safe-area-context'
-import {useState,useEffect} from 'react'//useEffect=and nger sikeyer weym compont sikefet code masked
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 
-import { Ionicons} from '@expo/vector-icons';
-import{router } from 'expo-router';
-import {useTasks} from '../../contexts/taskContets'
-import {useColors} from '../../contexts/ColorContets';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useTasks } from '../../contexts/taskContets';
+import { useColors } from '../../contexts/ColorContets';
 
-export default function FocusTime(){
-  const {colors} = useColors();
-  const {setTasks,selectedTask}=useTasks();
-    const focusTask=selectedTask;
-    const times = [10,900, 1200];
-    const [isRunning,setIsRunning ] = useState(false);//ahun timeru eyesera new wey yemilewn yyzal(false)yehonebet mejemeriya timeru ayseram
-    const[selectedTime,setSelectedTime] = useState()//yetgnawn time mertku
-    const timeFormat = (time) =>{
-      const minutes = Math.floor(time/60);
-      const second =Math.floor(time%60);
+export default function FocusTime() {
+  const { colors } = useColors();
+  const { setTasks, selectedTask } = useTasks();
+  const focusTask = selectedTask;
 
-      return `${minutes}:${second<10 ? '0':''}${second}`;//5minut:3second =5:03
-    }
+  const times = [5, 900, 1200]; // በሰከንድ (5s, 15:00, 20:00)
+  const [isRunning, setIsRunning] = useState(false); // timer እየሰራ ነው?
+  const [selectedTime, setSelectedTime] = useState(null); // የተመረጠው ሰዓት
 
-    const showToast= () => {
-      Toast.show({ 
-        type:'info',
-        text1:`you have successfully focused on${focusTask}`,
-      })
-    }
-    useEffect(() =>{  //is running or selectedTime sikeyer yh code endisera new
-      //if(isRunning){
-      let intervalId;//like id creat in setInterval
-      intervalId = setInterval(()=>{//and and second endikens yemiyaderg new
-      setSelectedTime(prev => prev -1)//setSelectedTime lay and and ykensal
-    }, 1000)// bye and secod degagmeh sra malet new 1000millisseconds = 1second malet new
-  //}
+  const timeFormat = (time) => {
+    const minutes = Math.floor(time / 60);
+    const second = Math.floor(time % 60);
+    return `${minutes}:${second < 10 ? '0' : ''}${second}`; // 5:03
+  };
 
-          if(!isRunning || selectedTime < 0 ){
+  const showToast = () => {
+    Toast.show({
+      type: 'info',
+      text1: `you have successfully focused on ${focusTask}`,
+    });
+  };
 
-      clearInterval(intervalId);//zero  ena kezero betachi yemihon kehon yemikensewn part ykr
-    }
-    else if(selectedTime ===0){
+  // isRunning ሲቀየር interval ይጀምራል/ያቆማል
+  useEffect(() => {
+    if (!isRunning) return;
+    const id = setInterval(() => {
+      setSelectedTime((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [isRunning]);
+
+  // ሰዓቱ 0 ሲደርስ
+  useEffect(() => {
+    if (isRunning && selectedTime === 0) {
       showToast();
       setIsRunning(false);
-     //Alert.alert(`you have succefully focused on ${focusTask}`)
-      setTasks(prev => [...prev,selectedTask])
+      setTasks((prev) => [...prev, selectedTask]);
     }
-    
-    return () => clearInterval(intervalId);//useEffect endegena sisera yekedmow setInterval endayketl yredal
-  },[isRunning, selectedTime])//kehulet andu sikeyeru useEffect endegena yseral
+  }, [selectedTime]);
 
-    return(
-        
-          <SafeAreaView style={[styles.continer,{backgroundColor:colors.background}]}edges={['top']}>
-            
-          <TouchableOpacity style={[styles.backFab,{background:colors.textPrimary}]} onPress={() => {router.back();
-  setSelectedTime(null)   ;                                                            }}>
-            <Ionicons name="chevron-back" size={24} color={colors.textPrimary}/>
-            <Text style={{color:colors.textPrimary}}>Focus Session</Text>
-         </TouchableOpacity>
-         
-            <Text style={[styles.timerText,{color:colors.textPrimary}]}>
-               {selectedTime ? timeFormat (selectedTime): '00:00'}
-                </Text>
-            <View style={styles.focusTaskcontainer}>
-           <Text style={[styles.subTite,{color:colors.textPrimary}]}>focusing on : </Text>
-           <Text style={[styles.focusTask,{ color:colors.textPrimary }]}> {focusTask}</Text>
-           </View>
+  const onStartPress = () => {
+    if (!selectedTime) return; // ሰዓት ካልተመረጠ አይጀምርም
+    setIsRunning(!isRunning);
+  };
 
-          <View style={styles.underselectedText}/>
-          <View style={[styles.timeOptions,{backgroundColor:colors.background}]}>
-            {times.map((time,index) =>( 
-              <TouchableOpacity 
-              key={index} 
-                
-              
-              style={[styles.timeOptionsButton,{backgroundColor:colors.background}]} 
-              onPress={()=> setSelectedTime(time)} >
+  return (
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
+      {/* Back button */}
+      <TouchableOpacity
+        style={styles.backFab}
+        onPress={() => {
+          router.back();
+          setSelectedTime(null);
+          setIsRunning(false);
+        }}
+      >
+        <View style={[styles.backCircle, { backgroundColor: colors.textPrimary + '20' }]}>
+          <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
+        </View>
+        <Text style={{ color: colors.textPrimary, marginLeft: 10, fontSize: 13 }}>
+          Focus Session
+        </Text>
+      </TouchableOpacity>
 
+      {/* Timer */}
+      <Text style={[styles.timerText, { color: colors.textPrimary }]}>
+        {selectedTime ? timeFormat(selectedTime) : '00:00'}
+      </Text>
 
-                <Text style={[styles.timeOptionsText,{color:colors.textPrimary}]}> {timeFormat(time)}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+      {/* Focusing on card */}
+      <View style={[styles.focusCard, { backgroundColor: colors.textPrimary + '15' }]}>
+        <Text style={[styles.subTite, { color: colors.textPrimary }]}>
+          Focusing on : <Text style={styles.focusTask}>{focusTask}</Text>
+        </Text>
+      </View>
 
-         <TouchableOpacity style={styles.startFab} onPress={()=>{setIsRunning(!isRunning) }}>
-            <Text style={{color:'white'}}>{isRunning?'stop':'start'}</Text>
-         </TouchableOpacity>
+      {/* Time options */}
+      <View style={styles.timeOptions}>
+        {times.map((time, index) => (
+          <TouchableOpacity
+            key={index}
+            disabled={isRunning}
+            style={[
+              styles.timeOptionsButton,
+              { backgroundColor: colors.textPrimary + '15' },
+              selectedTime === time && { borderWidth: 2, borderColor: '#7ED321' },
+            ]}
+            onPress={() => setSelectedTime(time)}
+          >
+            <Text style={[styles.timeOptionsText, { color: colors.textPrimary }]}>
+              {timeFormat(time)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-          
-           <Toast/>    
-  
-        </SafeAreaView>
-          
-        
-          
-    )
+      {/* Start / Stop */}
+      <TouchableOpacity style={styles.startFab} onPress={onStartPress}>
+        <Text style={styles.startText}>{isRunning ? 'Stop' : 'Start'}</Text>
+      </TouchableOpacity>
+
+      <Toast />
+    </SafeAreaView>
+  );
 }
-const styles= StyleSheet.create({
-continer:{
-  flex:1,
-  backgroundColor:'transparent',
 
-  alignItems:'center',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
 
-},
-imageBackground:{
-  flex:1,
-  alignItems:'center',
+  backFab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginTop: 11,
+  },
+  backCircle: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
+  timerText: {
+    fontWeight: 'bold',
+    fontSize: 56,
+    marginTop: 50,
+  },
 
+  focusCard: {
+    width: '90%',
+    marginTop: 40,
+    paddingVertical: 36,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    justifyContent: 'center',
+  },
+  subTite: {
+    fontSize: 16,
+  },
+  focusTask: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 
-},
-timerText:{
-  fontWeight:'bold',
-  fontSize:50,
-  color:'#fff',
-  marginTop:50,
+  timeOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    marginTop: 30,
+  },
+  timeOptionsButton: {
+    flex: 1,
+    height: 48,
+    marginHorizontal: 6,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timeOptionsText: {
+    fontSize: 16,
+  },
 
-},
-subTite:{
-  fontSize:18,
-  color:'#fff',
-  marginTop:3,
-},
-focusTask:{
-  fonitSize:40,
-  color:'#fff',
-  marginTop:5,
- fontWeight:'bold',
-
-},
-underselectedText:{ //fezazawa line
-  height:10,
-  width:'100%',
-  marginTop:30,
-  marginBottom:20,
-
-},
-timeOptions:{
-  flexDirection:'row',
-  marginTop:30,
-  alignItime:'center',
-  //width:'100%',
-  //justifyContent:'space-around',
-},                               
-timeOptionsButton:{
-height:70,
-width:70,
-borderRadius:35,
-justifyContent:'center',
-alignItems:'center',
-backgroundColor:'transparent',
-borderWidth:2,
-borderColor:'#fff',
-margin:25,
-},
-timeOptionText:{
-  fontSize:18,
-  color:'#fff',
-},
-startStyle:{
-  margintop:50,
-},
-startFab:{
-  height:80,
-  width:80,
-  borderRadius:40,
-  backgroundColor:'transparent',
-  borderColor:'#fff',
-  justifyContent:'center',
-  alignItems:'center',
-  marginTop:50,
-  borderWidth:2,
-},
-backFab:{
-  flexDirection:'row',
-  height:50,
-  width:100,
-  marginTop:11,
-  alignItems:'center',
-  alignSelf:'flex-start',
-  marginLeft:20,
-},
-styleTask:{
-  alignItems:'center',
-  color:'#fff',
-  fontSize:15,
-  textAlign:'center',
- // alignSelf:'center',
-  marginBottom:20,
-  padding:20,
-},
-focusTaskcontainer:{
-  flexDirection:'row',
-  marginTop:60,
-  height:40,
-  width:80,
-   alignItems:'center',
-}
-})
+  startFab: {
+    width: '90%',
+    height: 52,
+    marginTop: 30,
+    borderRadius: 18,
+    backgroundColor: '#7ED321',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  startText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
