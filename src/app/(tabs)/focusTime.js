@@ -14,13 +14,13 @@ export default function FocusTime() {
   const focusTask = selectedTask;
 
   const times = [5, 900, 1200]; // በሰከንድ (5s, 15:00, 20:00)
-  const [isRunning, setIsRunning] = useState(false); // timer እየሰራ ነው?
-  const [selectedTime, setSelectedTime] = useState(null); // የተመረጠው ሰዓት
+  const [isRunning, setIsRunning] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
 
   const timeFormat = (time) => {
     const minutes = Math.floor(time / 60);
     const second = Math.floor(time % 60);
-    return `${minutes}:${second < 10 ? '0' : ''}${second}`; // 5:03
+    return `${minutes}:${second < 10 ? '0' : ''}${second}`;
   };
 
   const showToast = () => {
@@ -30,23 +30,24 @@ export default function FocusTime() {
     });
   };
 
-  // isRunning ሲቀየር interval ይጀምራል/ያቆማል
+  // Start ሲጫን በየሰከንዱ ይቀንሳል፤ ከ0 በታች አይወርድም
   useEffect(() => {
     if (!isRunning) return;
     const id = setInterval(() => {
-      setSelectedTime((prev) => prev - 1);
+      setSelectedTime((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => clearInterval(id);
   }, [isRunning]);
 
-  // ሰዓቱ 0 ሲደርስ
+  // ሰዓቱ 0 ሲደርስ: አቁም፣ toast አሳይ፣ task ጨምር፣ ሰዓቱን አጽዳ
   useEffect(() => {
     if (isRunning && selectedTime === 0) {
+      setIsRunning(false);      // ቆጠራውን ያቆማል
       showToast();
-      setIsRunning(false);
       setTasks((prev) => [...prev, selectedTask]);
+      setSelectedTime(null);    // ወደ 00:00 ይመለሳል
     }
-  }, [selectedTime]);
+  }, [selectedTime, isRunning]);
 
   const onStartPress = () => {
     if (!selectedTime) return; // ሰዓት ካልተመረጠ አይጀምርም
