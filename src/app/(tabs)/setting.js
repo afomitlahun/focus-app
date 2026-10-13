@@ -7,17 +7,17 @@ import { Ionicons} from '@expo/vector-icons';
 const Setting =()=>{
   const {colors,toggleTheme,StatusBarStyle,isDark}=useColors();
     return ( 
-  <View style ={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:colors.surface}} >
+  <View style ={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:colors.background}} >
     <StatusBar style={StatusBarStyle}/>
-    <View style ={[styles.header,{backgroundColor:colors.background}]}>
-    <Pressable onPress={toggleTheme} style={{  backgroundColor:colors.surface, padding:20,gap:10,flexDirection:'row',width:'100%',marginTop:20,padding:10, borderRadius:5 }}>
+    <View style ={[styles.header,{backgroundColor:colors.surface}]}>
+    <Pressable onPress={toggleTheme} style={{  backgroundColor:colors.surface, padding:10,flexDirection:'row',marginTop:20, }}>
       <Ionicons name={isDark? 'moon':'sunny' } size={20} color={colors.onPrimary} style={{marginLeft:10}}/>
       <View>
           <Text style={{ fontSize:20,color:colors. textPrimary  }}> Appearance</Text>
             <Text style={{ fontSize:12,color:colors. textPrimary  }}> Dark Mode</Text>
       </View>
     </Pressable>
-    <Pressable onPress={toggleTheme} style={{  backgroundColor:colors.surface, padding:20,gap:10,flexDirection:'row',width:'100%',marginTop:20,padding:10, borderRadius:5 }}>
+    <Pressable onPress={()=>{}} style={{  backgroundColor:colors.surface, padding:10,flexDirection:'row',marginTop:20, }}>
       <Ionicons name={'notifications-outline' } size={20} color={colors.onPrimary} style={{marginLeft:10}}/>
       <View>
           <Text style={{ fontSize:20,color:colors. textPrimary  }}> Notification</Text>
@@ -31,6 +31,7 @@ const Setting =()=>{
 }
 const styles = StyleSheet.create({
   header:{
+width:'85%',
 marginBottom:500,
   }
 })

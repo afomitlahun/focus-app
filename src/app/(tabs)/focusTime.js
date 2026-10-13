@@ -97,7 +97,7 @@ export default function FocusTime() {
             style={[
               styles.timeOptionsButton,
               { backgroundColor: colors.textPrimary + '15' },
-              selectedTime === time && { borderWidth: 2, borderColor: '#7ED321' },
+              selectedTime === time && { borderWidth: 2, borderColor: colors.textPrimary },
             ]}
             onPress={() => setSelectedTime(time)}
           >
@@ -109,7 +109,7 @@ export default function FocusTime() {
       </View>
 
       {/* Start / Stop */}
-      <TouchableOpacity style={styles.startFab} onPress={onStartPress}>
+      <TouchableOpacity style={[styles.startFab,{backgroundColor: colors.textPrimary}]} onPress={onStartPress}>
         <Text style={styles.startText}>{isRunning ? 'Stop' : 'Start'}</Text>
       </TouchableOpacity>
 
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     height: 52,
     marginTop: 30,
     borderRadius: 18,
-    backgroundColor: '#7ED321',
+    
     justifyContent: 'center',
     alignItems: 'center',
   },
