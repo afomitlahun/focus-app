@@ -4,6 +4,7 @@ import {useColors} from '../../contexts/ColorContets';
 import {SafeAreaView  } from'react-native-safe-area-context';
 import {StatusBar} from 'expo-status-bar';
 import { Ionicons} from '@expo/vector-icons';
+
 const Setting =()=>{
   const {colors,toggleTheme,StatusBarStyle,isDark}=useColors();
     return ( 

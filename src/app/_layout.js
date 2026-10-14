@@ -6,9 +6,12 @@ import {useState,useEffect} from 'react'
 import{useColors}from'../contexts/ColorContets'
 import {getItems,setItems} from"../Utils/Storage";
 import OnBoarding from '../Components/Onboarding';
-
+import {useFonts,Righteous_400Regular } from "@expo-google-fonts/righteous"
 
 export default function RootLayout({children}){
+  const [fontsLoaded]=useFonts({
+    Righteous_400Regular
+  });
   
 
  const[showOnboarding, setShowOnboarding]=useState(false);
@@ -24,6 +27,10 @@ export default function RootLayout({children}){
   useEffect(()=> {
      checkOnboardingStatus();
   },[])
+if(!fontsLoaded){
+  return null;
+}
+
   const DrawerContent =()=> {
     const {colors,statusBarStyle } =useColors();
     return (
@@ -38,6 +45,9 @@ export default function RootLayout({children}){
       name="(tabs)"
     options={{
       title:"Focus Timer",
+      headerTitleStyle:{ fontFamily:
+       ' Righteous_400Regular' , fontSize:28},
+      
     }}
         />
          </Drawer>

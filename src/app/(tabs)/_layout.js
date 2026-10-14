@@ -7,6 +7,7 @@ import OnBoarding from '../../Components/Onboarding'
 import {useState,useEffect} from 'react'
 import {setItems, getItems} from "../../Utils/Storage";
 import { Ionicons } from '@expo/vector-icons';
+
 export default function Layout() {
   const[showOnboarding, setShowOnboarding]=useState(false);
   const checkOnboardingStatus = async () => {
@@ -40,14 +41,14 @@ export default function Layout() {
             tabBarInactiveTintColor:colors.textPrimary,
         }}>
      <Tabs.Screen name='index' options={{headerShown:false,
-               tabBarIcon:()=>( <Ionicons name='home-outline' size={24} color='black'/>),
+               tabBarIcon:({color,focused})=>( <Ionicons name={ focused?'home': 'home-outline'}size={24} color={color}/>),
 
      }}/>
      <Tabs.Screen name='focusTime'options={{headerShown:false,
-        tabBarIcon:() => (<Ionicons name='timer-outline' size={24} color='black'/>),
+        tabBarIcon:({color,focused}) => (<Ionicons name={focused?'timer':'timer-outline'} size={24} color={color}/>),
       }}/>
       <Tabs.Screen name='setting' options={{headerShown:false,
-        tabBarIcon:()=><Ionicons name='settings-outline' size ={24} color ='black'/>
+        tabBarIcon:({color,focused})=><Ionicons name={focused?'settings':'settings-outline'} size ={24} color ={color}/>
       }}/>
         </Tabs>
       </>

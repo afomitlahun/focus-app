@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useTasks } from '../../contexts/taskContets';
 import { useColors } from '../../contexts/ColorContets';
+import { Righteous_400Regular } from '@expo-google-fonts/righteous';
 
 export default function FocusTime() {
   const { colors } = useColors();
@@ -71,13 +72,13 @@ export default function FocusTime() {
         <View style={[styles.backCircle, { backgroundColor: colors.textPrimary + '20' }]}>
           <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
         </View>
-        <Text style={{ color: colors.textPrimary, marginLeft: 10, fontSize: 13 }}>
+        <Text style={{ color: colors.textPrimary, marginLeft: 10, fontSize: 13,fontFamily:Righteous_400Regular }}>
           Focus Session
         </Text>
       </TouchableOpacity>
 
       {/* Timer */}
-      <Text style={[styles.timerText, { color: colors.textPrimary }]}>
+      <Text style={[styles.timerText, { color: colors.textPrimary ,fontFamily:Righteous_400Regular}]}>
         {selectedTime ? timeFormat(selectedTime) : '00:00'}
       </Text>
 
@@ -140,7 +141,6 @@ const styles = StyleSheet.create({
   },
 
   timerText: {
-    fontWeight: 'bold',
     fontSize: 56,
     marginTop: 50,
   },
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
   },
   subTite: {
     fontSize: 16,
+    fontFamily:Righteous_400Regular,
   },
   focusTask: {
     fontSize: 18,
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     marginTop: 30,
+    fontFamily:Righteous_400Regular,
   },
   timeOptionsButton: {
     flex: 1,
@@ -177,6 +179,7 @@ const styles = StyleSheet.create({
   },
   timeOptionsText: {
     fontSize: 16,
+    fontFamily:Righteous_400Regular,
   },
 
   startFab: {
@@ -184,7 +187,6 @@ const styles = StyleSheet.create({
     height: 52,
     marginTop: 30,
     borderRadius: 18,
-    
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -192,5 +194,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily:Righteous_400Regular,
   },
 });
