@@ -41,7 +41,7 @@ if(!fontsLoaded){
           headerTintColor:colors.textPrimary,
         }}
         >
-        <Drawer.Screen
+        <Drawer.Screen  tt
       name="(tabs)"
     options={{
       title:"Focus Timer",
